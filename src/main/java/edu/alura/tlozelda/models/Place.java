@@ -1,8 +1,5 @@
 package edu.alura.tlozelda.models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Place {
     private String nombre;
     private String descripsion;
@@ -25,6 +22,10 @@ public class Place {
     }
     public void setDescripsion(String descripsion) {
         this.descripsion = descripsion;
+    }
+    @Override
+    public String toString() {
+        return "Nombre: " + nombre + "\ndescripsion:" + descripsion + "\n";
     }
 
 }

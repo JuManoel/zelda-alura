@@ -21,5 +21,11 @@ public class Item {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    @Override
+    public String toString() {
+        return "nombre: " + nombre + "\ndescripcion: " + descripcion + "\n";
+    }
+    
     
 }

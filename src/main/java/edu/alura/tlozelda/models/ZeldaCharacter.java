@@ -38,5 +38,10 @@ public class ZeldaCharacter {
     public void setGenero(String genero) {
         this.genero = genero;
     }
+    @Override
+    public String toString() {
+        return "nombre: " + nombre + "\nraca: " + raca + "\ndescripcion: " + descripcion + "\ngenero: "
+                + genero + "\n";
+    }
     
 }
