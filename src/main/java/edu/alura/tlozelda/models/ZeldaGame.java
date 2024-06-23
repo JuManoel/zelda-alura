@@ -1,6 +1,9 @@
 package edu.alura.tlozelda.models;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Locale;
 
 public class ZeldaGame {
     private String nombre;
@@ -10,7 +13,14 @@ public class ZeldaGame {
     public ZeldaGame(DataZeldaGame dataZe) {
         this.nombre = dataZe.nombre();
         this.descripcion = dataZe.descripcion();
-        this.dataLanz = LocalDate.parse(dataZe.dataLanz());
+        try {
+            this.dataLanz = LocalDate.parse(dataZe.dataLanz());
+        } catch (DateTimeParseException e) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH);
+            String data = dataZe.dataLanz().trim();
+            this.dataLanz = LocalDate.parse(data,formatter);
+        }
+        
     }
     public String getNombre() {
         return nombre;

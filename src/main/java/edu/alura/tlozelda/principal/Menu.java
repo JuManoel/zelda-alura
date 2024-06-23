@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import edu.alura.tlozelda.models.*;
 
 public class Menu {
@@ -24,25 +26,7 @@ public class Menu {
     private List<Item> items = new ArrayList<Item>();
     private List<Place> places = new ArrayList<>();
     private List<ZeldaGame> games = new ArrayList<>();
-
-    private String[] format(String json) {
-        String[] split = json.split("]");
-        json = split[0];
-        String[] split2 = json.split("\\[");
-        json = split2[1];
-        System.out.println(json);
-        String[] split3 = json.split("},");
-        for (int i = 0; i < split3.length - 1; i++) {
-            split3[i] = split3[i] + "}";
-        }
-        return split3;
-    }
-
     private void load() {
-        List<DataZeldaGame> dataGames = new ArrayList<>();
-        List<DataCharacter> dataCharacter = new ArrayList<>();
-        List<DataItem> dataItem = new ArrayList<>();
-        List<DataPlaces> dataPlaces = new ArrayList<>();
         /*
          * "https://zelda.fanapis.com/api/games",//jogos de zelda
          * "https://zelda.fanapis.com/api/places",////lugares de zelda
@@ -51,30 +35,37 @@ public class Menu {
          */
         for (int i = 0; i < URL.length; i++) {
             this.json = api.obtenerDatos(URL[i]);
-            String[] jsons = format(this.json);
             switch (i) {
                 case 0:
-                    for (String string : jsons) {
-                        dataGames.add(converter.obterDados(string, DataZeldaGame.class));
-                        games.add(new ZeldaGame(dataGames.get(dataGames.size() - 1)));
+                    ResponseApi<DataZeldaGame> rGames = converter.obterDados(this.json,
+                            new TypeReference<ResponseApi<DataZeldaGame>>() {
+                            });
+                    for (DataZeldaGame game : rGames.data()) {
+                        this.games.add(new ZeldaGame(game));
                     }
                     break;
                 case 1:
-                    for (String string : jsons) {
-                        dataPlaces.add(converter.obterDados(string, DataPlaces.class));
-                        places.add(new Place(dataPlaces.get(dataPlaces.size() - 1)));
+                    ResponseApi<DataPlaces> rPlaces = converter.obterDados(this.json,
+                            new TypeReference<ResponseApi<DataPlaces>>() {
+                            });
+                    for (DataPlaces place : rPlaces.data()) {
+                        this.places.add(new Place(place));
                     }
                     break;
                 case 2:
-                    for (String string : jsons) {
-                        dataItem.add(converter.obterDados(string, DataItem.class));
-                        items.add(new Item(dataItem.get(dataItem.size() - 1)));
+                    ResponseApi<DataItem> rItems = converter.obterDados(this.json,
+                            new TypeReference<ResponseApi<DataItem>>() {
+                            });
+                    for (DataItem item : rItems.data()) {
+                        this.items.add(new Item(item));
                     }
                     break;
                 case 3:
-                    for (String string : jsons) {
-                        dataCharacter.add(converter.obterDados(string, DataCharacter.class));
-                        personagens.add(new ZeldaCharacter(dataCharacter.get(dataCharacter.size() - 1)));
+                    ResponseApi<DataCharacter> rPerso = converter.obterDados(this.json,
+                            new TypeReference<ResponseApi<DataCharacter>>() {
+                            });
+                    for (DataCharacter pers : rPerso.data()) {
+                        this.personagens.add(new ZeldaCharacter(pers));
                     }
                     break;
                 default:
@@ -87,5 +78,28 @@ public class Menu {
 
     public void run() {
         load();
+        System.out.println("Que deseas buscar sobre los juegos de Zelda?");
+        String menu = """
+                1. Juegos de Zelda     3. Personagens de Zelda
+                2. Lugares de Zelda    4. Items de los juegos de Zelda
+                """;
+        System.out.println(menu);
+        scn = new Scanner(System.in);
+        int opcion = scn.nextInt();
+        switch (opcion) {
+            case 1:
+                System.out.println("Ingrese un nombre");
+                scn = new Scanner(System.in);
+                String nombre = scn.nextLine();
+                juegosDeZelda(nombre);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    public void juegosDeZelda(String nombre) {
+        System.out.println("ok?");
     }
 }

@@ -5,16 +5,14 @@ import java.util.List;
 
 public class Place {
     private String nombre;
-    private List<Appearances> aparece;
+    private String descripsion;
 
     
 
     public Place(DataPlaces dataPlaces) {
         this.nombre = dataPlaces.nombre();
-        aparece = new ArrayList<Appearances>();
-        for (DataAppearances dataAppearances : dataPlaces.aparece()) {
-            aparece.add(new Appearances(dataAppearances));
-        }
+        this.descripsion = dataPlaces.descrision();
+
     }
     public String getNombre() {
         return nombre;
@@ -22,11 +20,11 @@ public class Place {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    public List<Appearances> getAparece() {
-        return aparece;
+    public String getDescripsion() {
+        return descripsion;
     }
-    public void setPAarece(List<Appearances> parece) {
-        this.aparece = parece;
+    public void setDescripsion(String descripsion) {
+        this.descripsion = descripsion;
     }
 
 }

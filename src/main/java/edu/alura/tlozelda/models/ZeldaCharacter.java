@@ -4,6 +4,7 @@ public class ZeldaCharacter {
     private String nombre;
     private String raca;
     private String descripcion;
+    private String genero;
 
     
 
@@ -11,6 +12,7 @@ public class ZeldaCharacter {
         this.nombre = personagem.nombre();
         this.raca = personagem.raca();
         this.descripcion = personagem.descripcion();
+        this.genero = personagem.genero();
     }
     public String getNombre() {
         return nombre;
@@ -29,6 +31,12 @@ public class ZeldaCharacter {
     }
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+    public String getGenero() {
+        return genero;
+    }
+    public void setGenero(String genero) {
+        this.genero = genero;
     }
     
 }
