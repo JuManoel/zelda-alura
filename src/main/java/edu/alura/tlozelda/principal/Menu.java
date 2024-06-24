@@ -15,10 +15,10 @@ import edu.alura.tlozelda.models.*;
 
 public class Menu {
     private final String[] URL = {
-            "https://zelda.fanapis.com/api/games", // jogos de zelda
-            "https://zelda.fanapis.com/api/places", //// lugares de zelda
-            "https://zelda.fanapis.com/api/items", // items de zelda
-            "https://zelda.fanapis.com/api/characters"// personagens de zelda
+            "https://zelda.fanapis.com/api/games?limit=100", // jogos de zelda
+            "https://zelda.fanapis.com/api/places?limit=100", //// lugares de zelda
+            "https://zelda.fanapis.com/api/items?limit=100", // items de zelda
+            "https://zelda.fanapis.com/api/characters?limit=100"// personagens de zelda
     };
     private String json;
 
@@ -77,7 +77,10 @@ public class Menu {
             }
 
         }
-
+        System.out.println(this.games.size());
+        System.out.println(this.items.size());
+        System.out.println(this.personagens.size());
+        System.out.println(this.places.size());
     }
 
     public void run() {
@@ -136,8 +139,18 @@ public class Menu {
                         .findFirst();
                 if (game.isPresent())
                     System.out.println(game.get());
-                else
-                    System.out.println("Jeugo no encontrado");
+                else {
+                    this.json = api.obtenerDatos(URL[1] + "&name=" + capitalize(nombre));
+                    ResponseApi<DataZeldaGame> r = converter.obterDados(json,
+                            new TypeReference<ResponseApi<DataZeldaGame>>() {
+                            });
+                    try {
+                        ZeldaGame g = new ZeldaGame(r.data().get(0));
+                        System.out.println(g.toString());
+                    } catch (Exception e) {
+                        System.out.println("Jeugo no encontrado");
+                    }
+                }
                 break;
             case 2:
                 System.out.println("Ingrese el año");
@@ -181,8 +194,18 @@ public class Menu {
                         .findFirst();
                 if (place.isPresent())
                     System.out.println(place.get());
-                else
-                    System.out.println("Lugar no encuentrado");
+                else {
+                    this.json = api.obtenerDatos(URL[1] + "&name=" + capitalize(nombre));
+                    ResponseApi<DataPlaces> r = converter.obterDados(json,
+                            new TypeReference<ResponseApi<DataPlaces>>() {
+                            });
+                    try {
+                        Place g = new Place(r.data().get(0));
+                        System.out.println(g.toString());
+                    } catch (Exception e) {
+                        System.out.println("Jeugo no encontrado");
+                    }
+                }
                 break;
             case 2:
                 this.places.parallelStream()
@@ -211,8 +234,18 @@ public class Menu {
                         .findFirst();
                 if (item.isPresent())
                     System.out.println(item.get());
-                else
-                    System.out.println("Item no encontrado");
+                else {
+                    this.json = api.obtenerDatos(URL[2] + "&name=" + capitalize(nombre));
+                    ResponseApi<DataItem> r = converter.obterDados(json,
+                            new TypeReference<ResponseApi<DataItem>>() {
+                            });
+                    try {
+                        Item g = new Item(r.data().get(0));
+                        System.out.println(g.toString());
+                    } catch (Exception e) {
+                        System.out.println("Jeugo no encontrado");
+                    }
+                }
                 break;
             case 2:
                 this.items.parallelStream()
@@ -244,16 +277,25 @@ public class Menu {
                         .findFirst();
                 if (perso.isPresent())
                     System.out.println(perso.get());
-                else
-                    System.out.println("No encuentrado");
-
+                else {
+                    this.json = api.obtenerDatos(URL[3] + "&name=" + capitalize(nombre));
+                    ResponseApi<DataCharacter> r = converter.obterDados(json,
+                            new TypeReference<ResponseApi<DataCharacter>>() {
+                            });
+                    try {
+                        ZeldaCharacter g = new ZeldaCharacter(r.data().get(0));
+                        System.out.println(g.toString());
+                    } catch (Exception e) {
+                        System.out.println("Jeugo no encontrado");
+                    }
+                }
                 break;
             case 2:
                 System.out.println("Ingre la raca que de deseas buscar");
                 scn = new Scanner(System.in);
                 String raca = scn.nextLine();
                 this.personagens.stream()
-                        .filter(p -> p.getRaca()!=null)
+                        .filter(p -> p.getRaca() != null)
                         .filter(p -> p.getRaca().toLowerCase().contains(raca.toLowerCase()))
                         .forEach(System.out::println);
                 break;
@@ -262,19 +304,19 @@ public class Menu {
                 scn = new Scanner(System.in);
                 String genero = scn.nextLine();
                 this.personagens.parallelStream()
-                        .filter(p -> p.getGenero()!=null)
+                        .filter(p -> p.getGenero() != null)
                         .filter(p -> p.getGenero().toLowerCase().contains(genero.toLowerCase()))
                         .forEach(System.out::println);
                 break;
             case 4:
                 this.personagens.stream()
-                        .filter(p -> p.getRaca()!=null)
+                        .filter(p -> p.getRaca() != null)
                         .sorted(Comparator.comparing(ZeldaCharacter::getRaca))
                         .forEach(System.out::println);
                 break;
             case 5:
                 this.personagens.stream()
-                        .filter(p -> p.getGenero()!=null)
+                        .filter(p -> p.getGenero() != null)
                         .sorted(Comparator.comparing(ZeldaCharacter::getGenero))
                         .forEach(System.out::println);
                 break;
@@ -286,5 +328,11 @@ public class Menu {
                 System.out.println("Opcion invalida");
                 break;
         }
+
+    }
+
+    private String capitalize(String s) {
+        s = s.trim();
+        return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
     }
 }

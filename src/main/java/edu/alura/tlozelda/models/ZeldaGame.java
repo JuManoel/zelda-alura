@@ -18,7 +18,12 @@ public class ZeldaGame {
         } catch (DateTimeParseException e) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH);
             String data = dataZe.dataLanz().trim();
-            this.dataLanz = LocalDate.parse(data,formatter);
+            try {
+                this.dataLanz = LocalDate.parse(data,formatter);
+            } catch (DateTimeParseException f) {
+                data= "January 1, "+data;
+                this.dataLanz = LocalDate.parse(data,formatter);
+            }
         }
         
     }
